@@ -18,7 +18,6 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use Filterable;
 
     /**
      * The attributes that are mass assignable.

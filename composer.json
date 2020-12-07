@@ -17,8 +17,7 @@
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.0",
         "livewire/livewire": "^2.0",
-        "rappasoft/laravel-livewire-tables": "dev-feature--add-filters",
-        "tucker-eric/eloquentfilter": "^2.4"
+        "rappasoft/laravel-livewire-tables": "dev-feature--add-filters"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

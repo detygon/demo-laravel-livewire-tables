@@ -16,7 +16,18 @@ class UsersTable extends TableComponent
 
     public function query(): Builder
     {
-        return User::filter($this->normalizedFilters());
+        $query = User::query();
+        $filters = $this->normalizedFilters();
+
+        $query->when(isset($filters['role']), function ($builder) use ($filters) {
+            $builder->where('role', $filters['role']);
+        });
+
+        $query->when(isset($filters['department']), function ($builder) use ($filters) {
+            $builder->whereIn('department', $filters['department']);
+        });
+
+        return $query;
     }
 
     public function columns(): array
