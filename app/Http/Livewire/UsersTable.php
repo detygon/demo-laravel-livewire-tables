@@ -3,10 +3,11 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
+use App\TableFilters\DepartmentFilter;
+use App\TableFilters\RoleFilter;
 use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Filters\BooleanFilter;
+use Illuminate\Support\Carbon;
 use Rappasoft\LaravelLivewireTables\Filters\DateFilter;
-use Rappasoft\LaravelLivewireTables\Filters\SelectFilter;
 use Rappasoft\LaravelLivewireTables\TableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
@@ -20,11 +21,15 @@ class UsersTable extends TableComponent
         $filters = $this->normalizedFilters();
 
         $query->when(isset($filters['role']), function ($builder) use ($filters) {
-            $builder->where('role', $filters['role']);
+            $builder->whereIn('role', $filters['role']);
         });
 
         $query->when(isset($filters['department']), function ($builder) use ($filters) {
-            $builder->whereIn('department', $filters['department']);
+            $builder->where('department', $filters['department']);
+        });
+
+        $query->when(isset($filters['created_at']), function ($builder) use ($filters) {
+            $builder->whereMonth('created_at', Carbon::parse($filters['created_at']));
         });
 
         return $query;
@@ -43,8 +48,8 @@ class UsersTable extends TableComponent
     public function filtersViews(): array
     {
         return [
-            (new SelectFilter('role', 'Role'))->withOptions(['admin' => 'Admin', 'moderator' => 'Moderator']),
-            (new BooleanFilter('department', 'Department'))->withOptions(['agency' => 'Agency', 'startup' => 'Startup']),
+            new RoleFilter(),
+            new DepartmentFilter(),
             (new DateFilter('created_at', 'Created At'))
         ];
     }
